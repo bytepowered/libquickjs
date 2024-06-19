@@ -306,6 +306,11 @@ libquickjs.a: $(patsubst %.o, %.nolto.o, $(QJS_LIB_OBJS))
 	$(AR) rcs $@ $^
 endif # CONFIG_LTO
 
+QJS_SHARED_OBJS=$(filter-out $(OBJDIR)/quickjs-libc.o,$(QJS_LIB_OBJS))
+
+libquickjs$(LTOEXT).so: $(patsubst %.o, %.pic.o, $(QJS_SHARED_OBJS))
+	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -shared -o $@ $^
+
 libquickjs.fuzz.a: $(patsubst %.o, %.fuzz.o, $(QJS_LIB_OBJS))
 	$(AR) rcs $@ $^
 
